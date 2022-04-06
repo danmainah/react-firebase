@@ -39,7 +39,7 @@ return (
 </Card.Body>
 <Card.Footer className="d-flex justify-content-between align-items-center">
 <p style={{ marginTop: 8, fontSize: 12, color: '#A1A1A1' }}>© 2022 Nandos</p>
-<p style={{ marginTop: 8, fontSize: 12, color: '#A1A1A1' }}><a href="#">Admin Login</a> • <a href="#">Privacy Policy</a> • <a href="#">Directions</a> • <a href="#">Contact Us</a></p>
+<p style={{ marginTop: 8, fontSize: 12, color: '#A1A1A1' }}><a href="/login">Admin Login</a> • <a href="#">Privacy Policy</a> • <a href="#">Directions</a> • <a href="#">Contact Us</a></p>
 </Card.Footer>
 </Card>
 </>
