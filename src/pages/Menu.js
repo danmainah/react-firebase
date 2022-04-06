@@ -1,6 +1,17 @@
 import React from 'react';
 import { Table, Card, Image, Button, } from 'react-bootstrap';
+import FirestoreService from '../utils/services/FirestoreService';
+
 function Menu(props) {
+    const [menuItems, setMenuItems] = useState([]);
+   useEffect(() => {
+      FirestoreService.getAllMenuItems().then((response) => {
+          setMenuItems(response._delegate._snapshot.docChanges);
+      }).catch((e) => {
+          alert("Error occured while fetching the menu item. " + e);
+      })
+   }, [])
+
 return (
 <>
 <Card style={{ margin: 24 }}>
