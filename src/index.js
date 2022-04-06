@@ -2,9 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import Menu from './pages/Menu';
+
 ReactDOM.render(
 <React.StrictMode>
-<h1>App Coming soon</h1>
+  <Menu />
 </React.StrictMode>,
 document.getElementById('root')
 );
