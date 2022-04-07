@@ -7,7 +7,11 @@ const [showAddEditForm, setShowAddEditForm] = useState(false);
 const [addEditFormType, setAddEditFormType] = useState('Add'); //Add, Edit
 const [validated, setValidated] = useState(false);
 const [menuItems, setMenuItems] = useState([]);
-const [menuCategories, setMenuCategories] = useState([]);
+const [currentMenuItem, setCurrentMenuItem] = useState({
+    "itemName": '',
+    "itemCategory": '',
+    "itemPrice": 0
+    })
 
 function fetchMenuCategories() {
     FirestoreService.getAllMenuCategories().then((response) => {
@@ -35,8 +39,21 @@ const handleModalClose = () => {
 setShowAddEditForm(false);
 }
 const handleAddEditFormSubmit = (e) => {
-alert("Functionality Coming Soon");
-}
+    e.preventDefault();
+    const { itemName, itemCategory, itemPrice } = e.target.elements;
+    if (itemPrice.value && itemName.value) {
+       if (addEditFormType === "Add") {
+          FirestoreService.AddNewMenuItem(itemName.value, itemCategory.value, itemPrice.value).then(() => {
+          alert(`${itemName.value} is successfully added to the menu.`)
+          setCurrentMenuItem({ "itemName": '', "itemCategory": '', "itemPrice": 0 })
+          handleModalClose();
+          window.location.reload(false);
+  }).catch((e) => {
+    alert("Error occured: " + e.message);
+  })
+  }}
+  setValidated(true)
+  }
 
 const [user, setUser] = useState(null);
 firebase.auth().onAuthStateChanged((user) => {
@@ -71,19 +88,47 @@ return (
 <Form.Control required type='text' placeholder='Enter item price' size='md' />
 <Form.Control.Feedback type='invalid'>Item Price is required</Form.Control.Feedback>
 </FloatingLabel>
+<Modal.Body>
+<FloatingLabel controlId="itemName" label="Item Name" className="mb-3" >
+<Form.Control required type='text' placeholder='Enter item name' size='md' value={currentMenuItem?.itemName} onChange={(e) => {
+setCurrentMenuItem({
+"itemName": (e.target.value) ? e.target.value : '',
+"itemCategory": currentMenuItem?.itemCategory,
+"itemPrice": currentMenuItem?.itemPrice
+})
+}} />
+<Form.Control.Feedback type='invalid'>Item name is required</Form.Control.Feedback>
+</FloatingLabel>
+<FloatingLabel controlId="itemCategory" label="Item Category" className="mb-3" >
+<Form.Select value={currentMenuItem?.itemCategory} onChange={(e) => {
+setCurrentMenuItem({
+"itemName": currentMenuItem?.itemName,
+"itemCategory": e.target.value,
+"itemPrice": currentMenuItem?.itemPrice
+})
+}}>
+{(menuCategories) && (menuCategories.map((menuCategory, index) => (<option key={index} value={menuCategory.doc.data.value.mapValue.fields.catName.stringValue}>
+<option key={index} value={menuCategory.doc.data.value.mapValue.fields.catName.stringValue}>
+{menuCategory.doc.data.value.mapValue.fields.catName.stringValue}
+</option>
+)))}
+</Form.Select>
+</FloatingLabel>
+<FloatingLabel controlId="itemPrice" label="Price (MYR)" className="mb-3">
+<Form.Control required type='text' placeholder='Enter item price' size='md' value={currentMenuItem?.itemPrice} onChange={(e) => {
+setCurrentMenuItem({
+"itemName": currentMenuItem?.itemName,
+"itemCategory": currentMenuItem?.itemCategory,
+"itemPrice": e.target.value)
+})
+}} />
+<Form.Control.Feedback type='invalid'>Item Price is required</Form.Control.Feedback>
+</FloatingLabel>
 </Modal.Body>
-<Modal.Footer>
-<Button type="submit">{(addEditFormType === 'Add') ? 'Add' : 'Update'}</Button>
-</Modal.Footer>
-</Form>
-</Modal>
-<Card style={{ margin: 24 }}>
-<Card.Header className="d-flex justify-content-between align-items-center">
-<div className="align-items-center" style={{ marginRight: 8 }}>
-<Image src={'https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Nandos_logo.svg/1200px-Nandos_logo.svg.png'} style={{ width: 80 }} />
-<h4 style={{ marginTop: 8, }}>Dashboard</h4>
-</div>
-<Button style={{ backgroundColor: '#000', borderWidth: 0, }}>Add New Item</Button>
+//... other UI elements as it is and then we need to update the Add New Item button
+<Button style={{ backgroundColor: '#000', borderWidth: 0, }} onClick={() => {
+setShowAddEditForm(true);
+}}>Add New Item</Button>
 </Card.Header>
 <Card.Body>
 <Table responsive>
