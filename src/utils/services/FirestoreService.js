@@ -8,4 +8,15 @@ function getAllMenuItems() {
       })
    })
 }
-export default { getAllMenuItems }
+
+function getAllMenuCategories() {
+   return new Promise((resolve, reject) => {
+   db.collection("MenuCategories").get().then((allMenuCategories) => {
+   resolve(allMenuCategories);
+   }).catch((e) => {
+   reject(e);
+   })
+   })
+   }
+   
+export default { getAllMenuItems, getAllMenuCategories }
