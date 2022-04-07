@@ -18,5 +18,19 @@ function getAllMenuCategories() {
    })
    })
    }
-   
-export default { getAllMenuItems, getAllMenuCategories }
+
+function AddNewMenuItem(itemName, itemCategory, itemPrice) {
+   return new Promise((resolve, reject) => {
+   const data = {
+   "itemName": itemName,
+   "itemCategory": itemCategory,
+   "itemPrice": parseFloat(itemPrice)
+   }
+   db.collection("MenuItems").add(data).then((docRef) => {
+      resolve(docRef);
+   }).catch((e) => {
+      reject(e);
+   })
+   })}
+
+export default { getAllMenuItems, getAllMenuCategories, AddNewMenuItem }   
