@@ -25,7 +25,7 @@ function fetchMenuCategories() {
     setMenuItems(response._delegate._snapshot.docChanges);
     }).catch((e) => {
     alert("Error occured while fetching the menu item. " + e);
-    })
+    });
     }
     useEffect(() => {
       if (user !== null) {
