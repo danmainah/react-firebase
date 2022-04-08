@@ -19,8 +19,8 @@ function fetchMenuCategories() {
     }).catch((e) => {
     alert("Error occured while fetching the menu categories. " + e);
     })
-    }
-    function fetchMenuItems() {
+    
+function fetchMenuItems() {
     FirestoreService.getAllMenuItems().then((response) => 
     setMenuItems(response._delegate._snapshot.docChanges);
     }).catch((e) => {
@@ -33,11 +33,23 @@ function fetchMenuCategories() {
           fetchMenuCategories();
         }
       fetchMenuItems();
-    }}, [user])
+}}, [user])
 
 const handleModalClose = () => {
 setShowAddEditForm(false);
 }
+
+const handleMenuItemDelete = () => {
+  setIsLoading(true);
+  FirestoreService.DeleteMenuItem(currentMenuItemId).then(() => {
+    alert(`Deletion Successful`);
+    handleModalClose();
+    window.location.reload(false);
+  }).catch((e) => {
+    alert("Error occured: " + e.message);
+  })
+}
+
 const handleAddEditFormSubmit = (e) => {
     e.preventDefault();
     const { itemName, itemCategory, itemPrice } = e.target.elements;
@@ -171,7 +183,13 @@ setAddEditFormType("Edit");
 setShowAddEditForm(true);
 }}>✎ Edit</Button>{' '}
 <Button variant='danger' onClick={() => {
-alert("Delete functionality coming soon")
+setCurrentMenuItemId(menuItem.doc.key.path.segments[menuItem.doc.key.path.segments.length - 1]);
+setCurrentMenuItem({
+"itemName": menuItem.doc.data.value.mapValue.fields.itemName.stringValue,
+"itemCategory": menuItem.doc.data.value.mapValue.fields.itemCategory.stringValue,
+"itemPrice": menuItem.doc.data.value.mapValue.fields.itemPrice.doubleValue ? menuItem.doc.data.value.mapValue.fields.itemPrice.doubleValue : menuItem.doc.data.value.mapValue.fields.itemPrice.integerValue
+});
+setShowDeleteDialogue(true);
 }}>x Delete</Button>
 </td>
 </tr>
