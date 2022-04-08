@@ -48,10 +48,21 @@ const handleAddEditFormSubmit = (e) => {
           setCurrentMenuItem({ "itemName": '', "itemCategory": '', "itemPrice": 0 })
           handleModalClose();
           window.location.reload(false);
+          
   }).catch((e) => {
     alert("Error occured: " + e.message);
   })
-  }}
+  }
+  else if (addEditFormType === "Edit") {FirestoreService.UpateMenuItem(currentMenuItemId, itemName.value, itemCategory.value, itemPrice.value).then(() => {
+    alert(`${itemName.value} is successfully updated.`);
+    setCurrentMenuItemId("");
+    setCurrentMenuItem({ "itemName": '', "itemCategory": '', "itemPrice": 0 })
+    handleModalClose();
+    window.location.reload(false);
+    }).catch((e) => {
+    alert("Error occured: " + e.message);
+    })
+    }}
   setValidated(true)
   }
 
