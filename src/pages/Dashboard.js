@@ -161,7 +161,14 @@ setShowAddEditForm(true);
 <td>{menuItem.doc.data.value.mapValue.fields.itemPrice.doubleValue ? menuItem.doc.data.value.mapValue.fields.itemPrice.doubleValue : menuItem.doc.data.value.mapValue.fields.itemPrice.integerValue}</td>
 <td>
 <Button variant='primary' onClick={() => {
-alert("Edit functionality coming soon")
+setCurrentMenuItemId(menuItem.doc.key.path.segments[menuItem.doc.key.path.segments.length - 1])
+setCurrentMenuItem({
+"itemName": menuItem.doc.data.value.mapValue.fields.itemName.stringValue,
+"itemCategory": menuItem.doc.data.value.mapValue.fields.itemCategory.stringValue,
+"itemPrice": menuItem.doc.data.value.mapValue.fields.itemPrice.doubleValue ? menuItem.doc.data.value.mapValue.fields.itemPrice.doubleValue : menuItem.doc.data.value.mapValue.fields.itemPrice.integerValue
+})
+setAddEditFormType("Edit");
+setShowAddEditForm(true);
 }}>✎ Edit</Button>{' '}
 <Button variant='danger' onClick={() => {
 alert("Delete functionality coming soon")

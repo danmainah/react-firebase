@@ -48,4 +48,14 @@ function AddNewMenuItem(itemName, itemCategory, itemPrice) {
       })
       }
 
-export default { getAllMenuItems, getAllMenuCategories, AddNewMenuItem, UpateMenuItem }
+      function DeleteMenuItem(menuItemID) {
+         return new Promise((resolve, reject) => {
+         db.collection("MenuItems").doc(menuItemID).delete().then(() => {
+         resolve()
+         }).catch((e) => {
+         reject(e)
+         })
+         })
+         }
+
+export default { getAllMenuItems, getAllMenuCategories, AddNewMenuItem, UpateMenuItem, DeleteMenuItem }   
